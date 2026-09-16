@@ -1,0 +1,174 @@
+{
+  "entities": {
+    "ResourceItem": {
+      "title": "ResourceItem",
+      "description": "Academic and clinical nursing resources, custom uploaded documents, notes, textbooks, past papers, and file storage items.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the resource"
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "Resource title"
+        },
+        "category": {
+          "type": "string",
+          "description": "Resource category (modules, past_papers, textbooks, notes, documents)"
+        },
+        "domain": {
+          "type": "string",
+          "description": "Nursing specialty domain"
+        },
+        "yearLevel": {
+          "type": "string",
+          "description": "Academic target year level"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 5000,
+          "description": "Detailed description or clinical summary"
+        },
+        "authorOrInstitution": {
+          "type": "string",
+          "maxLength": 300,
+          "description": "Author, faculty or institution name"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Last modified ISO timestamp"
+        },
+        "fileSize": {
+          "type": "string",
+          "description": "Formatted file size string"
+        },
+        "tags": {
+          "type": "array",
+          "description": "List of search tags"
+        },
+        "isBookmarked": {
+          "type": "boolean",
+          "description": "Whether resource is saved"
+        },
+        "isFeatured": {
+          "type": "boolean",
+          "description": "Featured indicator"
+        },
+        "downloadCount": {
+          "type": "number",
+          "description": "Number of device downloads"
+        },
+        "moduleCode": {
+          "type": "string",
+          "description": "Module reference code"
+        },
+        "examYear": {
+          "type": "number",
+          "description": "Past paper exam year"
+        },
+        "documentFormat": {
+          "type": "string",
+          "description": "Document format (PDF, DOCX, TXT, EPUB)"
+        },
+        "documentUrl": {
+          "type": "string",
+          "description": "URL for external or hosted document"
+        },
+        "documentDataUri": {
+          "type": "string",
+          "description": "Base64 data URI for offline/stored document files"
+        },
+        "documentContentText": {
+          "type": "string",
+          "description": "Plain text content extracted for reading"
+        },
+        "attachmentName": {
+          "type": "string",
+          "description": "Name of attached file"
+        },
+        "attachmentType": {
+          "type": "string",
+          "description": "Attachment format"
+        },
+        "attachmentDataUri": {
+          "type": "string",
+          "description": "Base64 data URI for attached file content"
+        },
+        "attachmentContentText": {
+          "type": "string",
+          "description": "Attachment text content"
+        },
+        "userId": {
+          "type": "string",
+          "description": "ID of user who uploaded or created the resource"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Creation ISO timestamp"
+        }
+      },
+      "required": ["id", "title", "category", "domain", "yearLevel", "description"]
+    },
+    "UserBookmark": {
+      "title": "UserBookmark",
+      "description": "User specific bookmarked resource ID entry.",
+      "type": "object",
+      "properties": {
+        "resourceId": {
+          "type": "string",
+          "description": "Bookmarked resource ID"
+        },
+        "userId": {
+          "type": "string",
+          "description": "User ID of bookmark owner"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Bookmark creation timestamp"
+        }
+      },
+      "required": ["resourceId", "userId"]
+    },
+    "OsceVideoItem": {
+      "title": "OsceVideoItem",
+      "description": "Zambian OSCE procedure video item saved in Firebase cloud storage/firestore",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "channelTitle": { "type": "string" },
+        "youtubeId": { "type": "string" },
+        "directUrl": { "type": "string" },
+        "streamUrl": { "type": "string" },
+        "thumbnailUrl": { "type": "string" },
+        "duration": { "type": "string" },
+        "views": { "type": "string" },
+        "procedureCategory": { "type": "string" },
+        "institution": { "type": "string" },
+        "difficulty": { "type": "string font-medium" },
+        "isVerifiedZambianContent": { "type": "boolean" },
+        "description": { "type": "string" },
+        "keySteps": { "type": "array" },
+        "requiredEquipment": { "type": "array" },
+        "examinerTips": { "type": "array" }
+      },
+      "required": ["id", "title", "channelTitle", "youtubeId", "directUrl", "streamUrl"]
+    }
+  },
+  "firestore": {
+    "/resources/{resourceId}": {
+      "schema": "ResourceItem",
+      "description": "Academic and clinical resources, uploaded files, textbooks, past papers, notes, and documents."
+    },
+    "/users/{userId}/bookmarks/{bookmarkId}": {
+      "schema": "UserBookmark",
+      "description": "User specific saved bookmarks."
+    },
+    "/osce_videos/{videoId}": {
+      "schema": "OsceVideoItem",
+      "description": "Zambian nursing OSCE clinical procedure videos stored in Firebase Cloud."
+    }
+  }
+}

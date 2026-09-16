@@ -1,0 +1,66 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidResourceItem(data) {
+      return data.keys().hasAll(['id', 'title', 'category', 'domain', 'yearLevel', 'description'])
+        && data.id is string && data.id.size() <= 128
+        && data.title is string && data.title.size() <= 500
+        && data.category is string && data.category.size() <= 50
+        && data.domain is string && data.domain.size() <= 100
+        && data.yearLevel is string && data.yearLevel.size() <= 100
+        && data.description is string && data.description.size() <= 10000;
+    }
+
+    function isValidUserBookmark(data) {
+      return data.keys().hasAll(['resourceId', 'userId'])
+        && data.resourceId is string && data.resourceId.size() <= 128
+        && data.userId is string && data.userId.size() <= 128;
+    }
+
+    // Resources collection (Academic library & uploaded file storage metadata)
+    match /resources/{resourceId} {
+      allow read: if true;
+      allow create: if isValidResourceItem(incoming());
+      allow update: if isValidResourceItem(incoming()) && (
+        !('userId' in existing()) || existing().userId == null || (isSignedIn() && existing().userId == request.auth.uid)
+      );
+      allow delete: if !('userId' in existing()) || existing().userId == null || (isSignedIn() && existing().userId == request.auth.uid);
+    }
+
+    // User bookmarks subcollection
+    match /users/{userId}/bookmarks/{bookmarkId} {
+      allow read: if true;
+      allow create, update: if isValidUserBookmark(incoming());
+      allow delete: if true;
+    }
+
+    // OSCE videos collection stored in Firebase Cloud
+    match /osce_videos/{videoId} {
+      allow read: if true;
+      allow write, create, update, delete: if true;
+    }
+  }
+}

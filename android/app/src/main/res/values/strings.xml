@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Data Nurse</string>
+    <string name="title_activity_main">Data Nurse</string>
+    <string name="package_name">com.chandafelix.datanurse</string>
+    <string name="custom_url_scheme">com.chandafelix.datanurse</string>
+</resources>
