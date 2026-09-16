@@ -6,6 +6,9 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig(() => {
   return {
+    define: {
+      'process.env': {}
+    },
     plugins: [
       react(),
       tailwindcss(),
